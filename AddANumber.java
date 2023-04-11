@@ -10,7 +10,6 @@ public class AddANumber {
         AddANumber addANumber=new AddANumber();
         addANumber(3,4);
     }
-
     private static int addANumber(int a, int c) {
         return a+c;
     }
