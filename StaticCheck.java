@@ -11,6 +11,5 @@ public class StaticCheck {
         s2.b=9;
         System.out.println(s2.b);
         System.out.println(s3.b);
-        System.out.println(StaticCheck.a);
     }
 }
