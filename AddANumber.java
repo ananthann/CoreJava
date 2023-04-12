@@ -3,7 +3,7 @@ public class AddANumber {
     int b;
     public static void AddANumber(int a, int b){
         int tot=a+b;
-        System.out.println(tot);
+        System.out.println("tota="+tot);
     }
     public static void main (String args[]){
         AddANumber(2,5);
