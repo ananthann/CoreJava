@@ -34,7 +34,7 @@ public class TelephoneDirectory {
     //display phone number and address using districts
     public void displayPhoneNumberAndAddress(String district){
         for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
-            if(entry.getValue().getAddress().getDistrict() ==district)  {
+            if(entry.getValue().getAddress().getDistrict().equalsIgnoreCase(district))  {
                 System.out.println(entry.getValue().getAddress().getDistrict());
                 System.out.println(entry.getValue().getAddress().getPlace());
                 System.out.println(entry.getValue().getAddress().getPlace());
@@ -46,20 +46,20 @@ public class TelephoneDirectory {
 
     //listing phone numbers from specific districts
     public  void getNumbersFromDistricts(String district){
-        System.out.println(district);
-        for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
-            if(entry.getValue().getAddress().getDistrict() ==district)  {
-                System.out.println(entry.getKey());
-                break;
+        for (Long key : telephoneDirectory.keySet()) {
+            if (telephoneDirectory.get(key).equals(district)) {
+                System.out.println(key);
+            }
+
             }
         }
-    }
+
 
     //display list of number and address from a district
     public void getNumberAndAddress(String district){
         System.out.println(district);
         for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
-            if(entry.getValue().getAddress().getDistrict() ==district)  {
+            if(entry.getValue().getAddress().getDistrict().equalsIgnoreCase(district))  {
                 System.out.println(entry.getKey());
                 break;
             }
