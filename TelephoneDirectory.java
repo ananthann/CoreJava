@@ -14,11 +14,12 @@ public class TelephoneDirectory {
     public Customer getCustomer(){
         return customer;
     }
-    HashMap<Long,Customer> telephoneDirectory=new HashMap<Long,Customer>();
+    static HashMap<Long,Customer> telephoneDirectory=new HashMap<Long,Customer>();
     public void addNumberForCustomer(){
         PhoneNumberGenerator p=new PhoneNumberGenerator();
         Customer customer=new Customer();
         telephoneDirectory.put(p.phoneNumberGenerator(),customer.addCustomer());
+        System.out.println(telephoneDirectory);
     }
 
     //search address using number
@@ -35,24 +36,22 @@ public class TelephoneDirectory {
     public void displayPhoneNumberAndAddress(String district){
         for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
             if(entry.getValue().getAddress().getDistrict().equalsIgnoreCase(district))  {
-                System.out.println(entry.getValue().getAddress().getDistrict());
-                System.out.println(entry.getValue().getAddress().getPlace());
-                System.out.println(entry.getValue().getAddress().getPlace());
+                System.out.println("district"+entry.getValue().getAddress().getDistrict());
+                System.out.println("place "+entry.getValue().getAddress().getPlace());
+                System.out.println("Pin code "+entry.getValue().getAddress().getPinCode());
                 System.out.println( entry.getKey());
-                break;
             }
         }
     }
 
     //listing phone numbers from specific districts
     public  void getNumbersFromDistricts(String district){
-        for (Long key : telephoneDirectory.keySet()) {
-            if (telephoneDirectory.get(key).equals(district)) {
-                System.out.println(key);
-            }
-
+        for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
+            if(entry.getValue().getAddress().getDistrict().equalsIgnoreCase(district))  {
+                System.out.println(entry.getKey());
             }
         }
+    }
 
 
     //display list of number and address from a district
@@ -61,7 +60,6 @@ public class TelephoneDirectory {
         for(Map.Entry<Long, Customer> entry: telephoneDirectory.entrySet()) {
             if(entry.getValue().getAddress().getDistrict().equalsIgnoreCase(district))  {
                 System.out.println(entry.getKey());
-                break;
             }
         }
     }
