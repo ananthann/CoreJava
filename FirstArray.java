@@ -24,7 +24,6 @@ public class FirstArray {
 
     public static void main(String args[]) throws InterruptedException {
         FirstArray f1=new FirstArray();
-        f1.createArray();
         SortArray s1=new SortArray();
         s1.sort(f1.createArray());
     }
