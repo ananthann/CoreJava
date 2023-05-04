@@ -20,11 +20,10 @@ public class CreateArray extends Thread {
         }
         return array;
     }
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) {
         CreateArray f1=new CreateArray();
-        f1.
+
         SortArray s1=new SortArray();
         int a[][]=f1.createArray();
-        s1.sort(a);
     }
 }
