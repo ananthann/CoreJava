@@ -1,24 +1,16 @@
 package com.example.MovieSearch.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Movies {
-    @Id
-    @GeneratedValue
-    Integer movieId;
-    String title;
-    Integer year;
-    String directorName;
-    String imagePath;
-
+    Integer id;
+    String resultType;
+    String image;
+    Integer title;
+    String description;
 }
