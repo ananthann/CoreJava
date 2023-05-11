@@ -12,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableCaching
 public class MovieSearchApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MovieSearchApplication.class, args);
