@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -30,9 +32,17 @@ public class MovieService {
     }
 
     @Cacheable(key = "#title")
-    public List<MovieResponseDto> getMovie(String title) {
-        if (cacheManager.getCache("movieCache")
-                .get(title).get()==null) {
+    public List<com.example.MovieSearch.RequestDTO.MovieResponseDto> getMovie(String title) {
+        Boolean checkNull = null;
+        List<com.example.MovieSearch.RequestDTO.MovieResponseDto> movieResponseDtoList=new ArrayList<>();
+        try {
+             movieResponseDtoList = (List<com.example.MovieSearch.RequestDTO.MovieResponseDto>) cacheManager.getCache("movieCache")
+                    .get(title).get();
+            return movieResponseDtoList;
+        } catch (NullPointerException e) {
+            checkNull = true;
+        }
+        if (checkNull.equals(true)) {
             String apiKey = "k_g8224jch";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -42,13 +52,13 @@ public class MovieService {
             ImdbResponseMovieDto movieDto = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, ImdbResponseMovieDto.class).getBody();
             System.out.println("Movie1" + movieDto);
             List<Movies> moviesList = new ArrayList<>();
-            List<MovieResponseDto> movieResponseDtoList=new ArrayList<>();
+            movieResponseDtoList = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                MovieResponseDto movieResponseDto=new MovieResponseDto();
+                com.example.MovieSearch.RequestDTO.MovieResponseDto movieResponseDto = new com.example.MovieSearch.RequestDTO.MovieResponseDto();
                 movieResponseDto.setId(movieDto.getResults().get(i).getId());
                 movieResponseDto.setTitle(movieDto.getResults().get(i).getTitle());
                 movieResponseDto.setPoster(movieDto.getResults().get(i).getImage());
-                movieResponseDto.setYear(movieDto.getResults().get(i).getDescription().substring(0,4));
+                movieResponseDto.setYear(movieDto.getResults().get(i).getDescription().substring(0, 4));
                 movieResponseDtoList.add(movieResponseDto);
             }
 //            String id = "tt1375666";
@@ -56,25 +66,22 @@ public class MovieService {
 //            cacheManager.getCache("movieCache");
             return movieResponseDtoList;
         }
-        else {
-            List<MovieResponseDto> movieResponseDtoList = (List<MovieResponseDto>) cacheManager.getCache("movieCache")
-                    .get(title).get();
-            return movieResponseDtoList;
-        }
+        return movieResponseDtoList;
     }
+
+
     public void saveMovie(String title) {
-        List<Movies> movies = (List<Movies>) cacheManager.getCache("movieCache")
+        List<MovieResponseDto> movieResponseDtos = (List<MovieResponseDto>) cacheManager.getCache("movieCache")
                 .get(title).get();
-        for (int i=0;i<3;i++)
-        {
+        movieResponseDtos.forEach((element)->{
             Movies movies1 = new Movies();
-            movies1.setMovieId(movies.get(i).getMovieId());
+            movies1.setMovieId(element.getId());
             movies1.setKeyword(title);
-            movies1.setTitle(movies.get(i).getTitle());
-            movies1.setPoster(movies.get(i).getPoster());
-            movies1.setYear(movies.get(i).getYear());
+            movies1.setTitle(element.getTitle());
+            movies1.setPoster(element.getPoster());
+            movies1.setYear(element.getYear());
             movieRepo.save(movies1);
-        }
+        });
     }
     public void deleteMovieSet(String title) {
             cacheManager.getCache("movieCache").evictIfPresent(title);
@@ -85,6 +92,7 @@ public class MovieService {
         return movieRepo.findAll();
     }
 
+    @Transactional
     public void deleteSpecificMovie(String id) {
         cacheManager.getCache("movieCache").evictIfPresent(movieRepo.findById(id).get().getTitle());
         movieRepo.deleteById(id);

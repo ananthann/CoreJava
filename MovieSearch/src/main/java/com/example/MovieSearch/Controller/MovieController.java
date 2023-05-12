@@ -1,7 +1,6 @@
 package com.example.MovieSearch.Controller;
 
 import com.example.MovieSearch.Entit.Movies;
-import com.example.MovieSearch.RequestDTO.MovieResponseDto;
 import com.example.MovieSearch.Service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +16,8 @@ public class MovieController {
     @Autowired
     private  MovieService movieService;
 
-
-
     @GetMapping(value = "/searchMovie")
-    public ResponseEntity<List<MovieResponseDto>> getMovie(@RequestParam String title){
+    public ResponseEntity<List<com.example.MovieSearch.RequestDTO.MovieResponseDto>> getMovie(@RequestParam String title){
         return ResponseEntity.ok().body(movieService.getMovie(title));
     }
     @PostMapping(value = "/saveMovie")
